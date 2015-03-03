@@ -58,7 +58,7 @@ public class Utils {
 
     /** The string that prefixes all text messages signed using Bitcoin keys. */
 
-    public static final String BITCOIN_SIGNED_MESSAGE_HEADER = "Quarkcoin Signed Message:\n";
+    public static final String BITCOIN_SIGNED_MESSAGE_HEADER = "Monetaryunit Signed Message:\n";
 
     public static final byte[] BITCOIN_SIGNED_MESSAGE_HEADER_BYTES = BITCOIN_SIGNED_MESSAGE_HEADER.getBytes(Charsets.UTF_8);
 

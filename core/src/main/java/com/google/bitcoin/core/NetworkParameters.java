@@ -16,22 +16,26 @@
 
 package com.google.bitcoin.core;
 
-import com.google.bitcoin.params.*;
+import com.google.bitcoin.params.MainNetParams;
+import com.google.bitcoin.params.RegTestParams;
+import com.google.bitcoin.params.TestNet2Params;
+import com.google.bitcoin.params.TestNet3Params;
+import com.google.bitcoin.params.UnitTestParams;
 import com.google.bitcoin.script.Script;
 import com.google.bitcoin.script.ScriptOpCodes;
 import com.google.common.base.Objects;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongycastle.util.encoders.Hex;
 
-import javax.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.bitcoin.core.Utils.COIN;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.Nullable;
 /**
  * <p>NetworkParameters contains the data needed for working with an instantiation of a Bitcoin chain.</p>
  *
@@ -113,7 +117,7 @@ public abstract class NetworkParameters implements Serializable {
                     //("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f"));
             scriptPubKeyBytes.write(ScriptOpCodes.OP_CHECKSIG);
             t.addOutput(new TransactionOutput(n, t, Utils.toNanoCoins(CoinDefinition.genesisBlockValue, 0), scriptPubKeyBytes.toByteArray()));
-            genesisBlock.setMerkleRoot(new Sha256Hash("868b2fb28cb1a0b881480cc85eb207e29e6ae75cdd6d26688ed34c2d2d23c776"));
+            genesisBlock.setMerkleRoot(new Sha256Hash("a2cc3c1d8ab6e50e80464693199eefdd172d45c4129998394e636e47b5621364"));
         } catch (Exception e) {
             // Cannot happen.
             throw new RuntimeException(e);
@@ -136,7 +140,7 @@ public abstract class NetworkParameters implements Serializable {
             Script.writeBytes(scriptPubKeyBytes, Hex.decode
                     ("04a5814813115273a109cff99907ba4a05d951873dae7acb6c973d0c9e7c88911a3dbc9aa600deac241b91707e7b4ffb30ad91c8e56e695a1ddf318592988afe0a"));
             scriptPubKeyBytes.write(ScriptOpCodes.OP_CHECKSIG);
-            t.addOutput(new TransactionOutput(n, t, Utils.toNanoCoins(50, 0), scriptPubKeyBytes.toByteArray()));
+            t.addOutput(new TransactionOutput(n, t, Utils.toNanoCoins(0, 0), scriptPubKeyBytes.toByteArray()));
         } catch (Exception e) {
             // Cannot happen.
             throw new RuntimeException(e);

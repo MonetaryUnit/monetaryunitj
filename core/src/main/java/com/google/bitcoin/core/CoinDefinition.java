@@ -1,37 +1,22 @@
 package com.google.bitcoin.core;
 
-import java.math.BigInteger;
-import java.util.Date;
-import java.util.Map;
-import java.util.Vector;
-import fr.cryptohash.BLAKE512;
-import fr.cryptohash.BMW512;
-import fr.cryptohash.Groestl512;
-import fr.cryptohash.Skein512;
-import fr.cryptohash.Keccak512;
-import fr.cryptohash.JH512;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.management.resources.agent_ko;
 
-/**
- * Created with IntelliJ IDEA.
- * User: HashEngineering
- * Date: 8/13/13
- * Time: 7:23 PM
- * To change this template use File | Settings | File Templates.
- */
+import java.math.BigInteger;
+import java.util.Map;
+
 public class CoinDefinition {
     private static final Logger log = LoggerFactory.getLogger(CoinDefinition.class);
 
-    public static final String coinName = "Quark";
-    public static final String coinTicker = "QRK";
-    public static final String coinURIScheme = "quark";
-    public static final String coinURIScheme2 = "quarkcoin";
-    public static final String coinInternalName = "quarkcoin";
-    public static final String cryptsyMarketId = "71";
-    public static final String cryptsyMarketCurrency = "BTC";
-    public static final String PATTERN_PRIVATE_KEY_START = "[U7]";
+    public static final String coinName = "MonetaryUnit";
+    public static final String coinTicker = "MUE";
+    public static final String coinURIScheme = "monetaryunit";
+    public static final String coinURIScheme2 = "monetaryunit";
+    public static final String coinInternalName = "monetaryunit";
+    public static final String cryptsyMarketId = "0";
+    public static final String cryptsyMarketCurrency = "MUE";
+    public static final String PATTERN_PRIVATE_KEY_START = "[5]";
 
     public static String lowerCaseCoinName() { return coinName.toLowerCase(); }
 
@@ -42,18 +27,16 @@ public class CoinDefinition {
     public static final CoinPrecision coinPrecision = CoinPrecision.Coins;
 
 
-    //public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://quarkexplorer.com/";
-    //public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://quarkexplorer.com/";
-    public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://qrk.blockr.io/";
-    public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://qrk.blockr.io/";
-    public static final String BLOCKEXPLORER_BLOCK_PATH = "block/info/";
-    public static final String BLOCKEXPLORER_TRANSACTION_PATH = "tx/info/";
-    public static final String BLOCKEXPLORER_ADDRESS_PATH = "address/info/";
+    public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://104.131.87.192:3000/";
+    public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://104.131.87.192:3000/";
+    public static final String BLOCKEXPLORER_BLOCK_PATH = "block/";
+    public static final String BLOCKEXPLORER_TRANSACTION_PATH = "tx/";
+    public static final String BLOCKEXPLORER_ADDRESS_PATH = "address/";
 
-    public static final String BLOCKEXPLORER_PATH_URL_TEST = "block/info/";
+    public static final String BLOCKEXPLORER_PATH_URL_TEST = "block/";
 
 
-    public static final String DONATION_ADDRESS = "QVJZByN6HdrTuEjAbgXpAnEUxUeeUaoEcA";  //HashEngineering donation QRK address
+    public static final String DONATION_ADDRESS = "7NYjAqzXNdtBhRxM3Jw2XxjVsVsyP9LMjM";  //HashEngineering donation QRK address
 
     enum CoinHash {
         SHA256,
@@ -63,10 +46,10 @@ public class CoinDefinition {
     public static final CoinHash coinHash = CoinHash.quark;
 
     public static boolean checkpointFileSupport = true;
-    public static int checkpointDaysBack = 21;
+    public static int checkpointDaysBack = 5;
     //Original Values
-    public static final int TARGET_TIMESPAN = (int)(10 * 60);  // 10 minutes per difficulty cycle, on average.
-    public static final int TARGET_SPACING = (int)(1 * 30);  // 30 seconds per block.
+    public static final int TARGET_TIMESPAN = (int)(10 * 40);  // 10 minutes per difficulty cycle, on average.
+    public static final int TARGET_SPACING = (int)(1 * 40);  // 30 seconds per block.
     public static final int INTERVAL = TARGET_TIMESPAN / TARGET_SPACING;  //20 blocks
 
     public static final int getInterval(int height, boolean testNet) {
@@ -81,7 +64,7 @@ public class CoinDefinition {
     }
     public static int getMaxTimeSpan(int value, int height, boolean testNet)
     {
-            return value * 110 / 100;
+            return value * 40 / 100;
     }
     public static int getMinTimeSpan(int value, int height, boolean testNet)
     {
@@ -112,70 +95,41 @@ public class CoinDefinition {
         return PROTOCOL_VERSION <= 70000;
     }
 
-    public static final int Port    = 11973;       //protocol.h GetDefaultPort(testnet=false)
-    public static final int TestPort = 21973;     //protocol.h GetDefaultPort(testnet=true)
+    public static final int Port    = 29948;       //protocol.h GetDefaultPort(testnet=false)
+    public static final int TestPort = 39948;     //protocol.h GetDefaultPort(testnet=true)
 
     //
     //  Production
     //
-    public static final int AddressHeader = 58;             //base58.h CBitcoinAddress::PUBKEY_ADDRESS
+    public static final int AddressHeader = 15;             //base58.h CBitcoinAddress::PUBKEY_ADDRESS
     public static final int p2shHeader = 9;             //base58.h CBitcoinAddress::SCRIPT_ADDRESS
 
     public static final int dumpedPrivateKeyHeader = 128;   //common to all coins
-    public static final long PacketMagic = 0xfea503dd;      //0xfb, 0xc0, 0xb6, 0xdb
+    public static final long PacketMagic = 0x04050504;      //0xfb, 0xc0, 0xb6, 0xdb
 
     //Genesis Block Information from main.cpp: LoadBlockIndex
     static public long genesisBlockDifficultyTarget = (0x1e0fffffL);         //main.cpp: LoadBlockIndex
-    static public long genesisBlockTime = 1374408079L;                       //main.cpp: LoadBlockIndex
-    static public long genesisBlockNonce = (12058113);                         //main.cpp: LoadBlockIndex
-    static public String genesisHash = "00000c257b93a36e9a4318a64398d661866341331a984e2b486414fc5bb16ccd"; //main.cpp: hashGenesisBlock
-    static public int genesisBlockValue = 1;                                                              //main.cpp: LoadBlockIndex
+    static public long genesisBlockTime = 1404668205L;                       //main.cpp: LoadBlockIndex
+    static public long genesisBlockNonce = (139785);                         //main.cpp: LoadBlockIndex
+    static public String genesisHash = "0000070e6b650e7a6f20e015031b74c1f7e2b25ed4e419d8825ab9cc7eccfa92"; //main.cpp: hashGenesisBlock
+    static public int genesisBlockValue = 0;                                                              //main.cpp: LoadBlockIndex
     //taken from the raw data of the block explorer
 
-    static public String genesisTxInBytes = "04ffff001d0104423231204a756c7920323031332c2054686520477561726469616e2c20546573636f20626f7373207361797320636865617020666f6f6420657261206973206f766572";   //"21 July 2013, The Guardian, Tesco boss says cheap food era is over"
-    static public String genesisTxOutBytes = "04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f";
+    static public String genesisTxInBytes = "4d204f204e204520542041205220592055204e20492054";
+    static public String genesisTxOutBytes = "";
 
     //net.cpp strDNSSeed
     static public String[] dnsSeeds = new String[] {
-            "seed1.quarkfoundation.cc", //95.85.58.230
-            "seed2.quarkfoundation.cc", //162.243.46.40
-            "seed3.quarkfoundation.cc",// 188.226.154.76
-            "seed4.quarkfoundation.cc",// 128.199.215.12
-            "seed5.quarkfoundation.cc",
-            "seed6.quarkfoundation.cc",
-            "seed7.quarkfoundation.cc",
-            "seed8.quarkfoundation.cc",
-            "110.174.173.86",
-            "87.220.147.144",
-            "seed1.qrk.cc",      //162.243.253.209     ***
-        //    "seed2.qrk.cc",    //95.85.4.223
-         //   "seed3.qrk.cc",    //192.241.195.203
-            "seed4.qrk.cc",    //192.241.151.155 ***
-            "seed5.qrk.cc",    //95.85.2.86      ***
-           // "seed6.qrk.cc",    //162.243.138.170
-           // "seed1.qrkcoin.org",   //192.241.151.155  (duplicate)
-           // "seed2.qrkcoin.org", //95.85.4.223        (duplicate)
-            "seed3.qrkcoin.org", //193.68.21.25 ***
-           // "seed4.qrkcoin.org",  //95.85.4.223       (duplicate)
-           // "seed5.qrkcoin.org",  //162.243.138.170   (duplicate)
-           // "seed6.qrkcoin.org",  //95.85.2.86        (duplicate)
-           // "seed1.quarkinvest.info",  //192.241.151.155 (duplicate)
-           // "seed2.quarkinvest.info",  //95.85.2.86      (duplicate)
-           // "seed3.quarkinvest.info",  //162.243.138.170 (duplicate)
-           // "seed4.quarkinvest.info",  //95.85.4.223     (duplicate)
-           // "seed5.quarkinvest.info",  //192.241.195.203 (duplicate)
-           // "seed6.quarkinvest.info",  //192.241.151.155 (duplicate)
-            //"quarkcoin.no-ip.biz",       //95.85.2.86    (duplicate)
-            "quarkcoin.mooo.com",   //192.241.171.45  ***
-            //"qrk.ignorelist.com", //162.243.138.170      (duplicate)
-            //"qrk.redirectme.net",  //162.243.253.209  ***  (duplicate)
-            //"qrk.no-ip.biz",       //192.241.151.155       (duplicate)
+            "muechain.info",
+            "103.19.252.82",
+            "178.62.247.76",
+            "104.131.66.88",
 
     };
     public static int minBroadcastConnections = 0;   //0 for default; we need more peers.
 
     //
-    // TestNet - quarkcoin - not tested
+    // TestNet - monetaryunit - not tested
     //
     public static final boolean supportsTestNet = false;
     public static final int testnetAddressHeader = 119;             //base58.h CBitcoinAddress::PUBKEY_ADDRESS_TEST
@@ -187,8 +141,8 @@ public class CoinDefinition {
     static public long testnetGenesisBlockNonce = (905523645);                         //main.cpp: LoadBlockIndex
 
 
-    static final long _COIN = 100000;
-    static final BigInteger nGenesisBlockRewardCoin = COIN;
+    static final long _COIN = 10000000;
+    static final BigInteger nGenesisBlockRewardCoin = BigInteger.valueOf(0 * _COIN);
     static final BigInteger nBlockRewardStartCoin = BigInteger.valueOf(2048 * _COIN);
     static final BigInteger nBlockRewardMinimumCoin = COIN;
 
@@ -223,43 +177,37 @@ public class CoinDefinition {
           "not supported"
     };
     //from main.h: CAlert::CheckSignature
-    public static final String SATOSHI_KEY = "0493e6dc310a0e444cfb20f3234a238f77699806d47909a42481010c5ce68ff04d3babc959cd037bd3aa6ded929f2b9b4aa2f626786cd7f8495e5bb61e9cfebbc4";
-    public static final String TESTNET_SATOSHI_KEY = "04218bc3f08237baa077cb1b0e5a81695fcf3f5b4e220b4ad274d05a31d762dd4e191efa7b736a24a32d6fd9ac1b5ebb2787c70e9dfad0016a8b32f7bd2520dbd5";
+    public static final String SATOSHI_KEY = "044160a269d0250990b4517566b47e24d2a94ba458edfe856d4a63c9c62cc3aa6354cddbc9371313af65616675fa009ab13aac2bb0f5ce6bf7b8e91861765144dc";
+    public static final String TESTNET_SATOSHI_KEY = "04f98a3941171ec7de8b83593aa6f7459a7605fb055c3e82c330ef89e7a46b78efeaa1e15580dddf694cf668fcc57b3aa0a47555e33aa7b0cb86ef6393975dc8f4";
 
     /** The string returned by getId() for the main, production network where people trade things. */
-    public static final String ID_MAINNET = "org.quark.production";
+    public static final String ID_MAINNET = "org.monetaryunit.production";
     /** The string returned by getId() for the testnet. */
-    public static final String ID_TESTNET = "org.quark.test";
+    public static final String ID_TESTNET = "org.monetaryunit.test";
     /** Unit test network. */
-    public static final String ID_UNITTESTNET = "com.google.quark.unittest";
+    public static final String ID_UNITTESTNET = "com.google.monetaryunit.unittest";
 
     //checkpoints.cpp Checkpoints::mapCheckpoints
     public static void initCheckpoints(Map<Integer, Sha256Hash> checkpoints)
     {
-        checkpoints.put( 0,     new Sha256Hash("00000c257b93a36e9a4318a64398d661866341331a984e2b486414fc5bb16ccd"));
-        checkpoints.put( 41056, new Sha256Hash("000000001f12305bf0443551030d9f18c5d7b1a6b7eb8e899b1b26fc45924ade"));
-        checkpoints.put( 81847, new Sha256Hash("00000000c164428877cd4d46e2facc881b6b0a803e44a02c1f3b279ae7d58c32"));
-        checkpoints.put(308484, new Sha256Hash("000000016bd2ef95ae4a456c6114cd7736a4219de5b75b2139c840650144e143"));
-        checkpoints.put(380481, new Sha256Hash("00000003064d1fdbe86f35bfce8c54f88a80ef773e820ca86ae820ed6c4defcc"));
-        checkpoints.put(404998, new Sha256Hash("000000004a815d04f437dd83d84866a8a07865f5b47030668a8096df0615361f"));
-        checkpoints.put(411932, new Sha256Hash("000000001f3c7ec7251ebc1670fb3f772b42e25356fa02468c02c89199617cd5"));
-        checkpoints.put(423094, new Sha256Hash("0000000007001e561197a35026b7c9bbaf0b9a1c918a41d9e7d638e44459f116"));
-        checkpoints.put(443157, new Sha256Hash("000000000b103e119485969439ab2203b5578be3fb8b3aab512ebebaca1bce81"));
-        checkpoints.put(458433, new Sha256Hash("000000000318a428560180bb8166321a6b20ae78fc0a9b3c560d30476859b2b5"));
-        checkpoints.put(464836, new Sha256Hash("00000000079e9a16f173bf610f2ceddc5659aa7e9df2366dea01e346c37f9692"));
-        checkpoints.put(467282, new Sha256Hash("0000000004a17401913be0aa29af7ace3335d58a846938d4fee0c749e4828d1d"));
-        checkpoints.put(473033, new Sha256Hash("000000000515c71eb7c3de0574d5f6c632d8de9053c626aba22ae3a9eff67e9c"));
-        checkpoints.put(538178, new Sha256Hash("000000000a13e56dc5d7962d4e3a852ff24055aa15096085d8173faf95172f4d"));
-        checkpoints.put(621138, new Sha256Hash("0000000016a7d31cabbc6257c53d3b58f82f1a897d79066dabcb5ce5b031f8ca"));
-        checkpoints.put(714001, new Sha256Hash("000000001d2b41db149991d5e01aee448042de6ac94e12c5ae6299e4fb129f5a"));
-        checkpoints.put(797370, new Sha256Hash("000000001b24a2f70ce1e50c19d5f3dd77fbd6e0f0a3eb61b95ceaafb8435636"));
-        checkpoints.put(895901, new Sha256Hash("0000000016db7c64fb4bb6475fbb06dca656d32b7864a2d045612660106d411c"));
-        checkpoints.put(972235, new Sha256Hash("000000004e92bead093b946351cd2e7125d23e36042687497561db00a77b6ae8"));
+        checkpoints.put( 0,      new Sha256Hash("0000070e6b650e7a6f20e015031b74c1f7e2b25ed4e419d8825ab9cc7eccfa92"));
+        checkpoints.put( 1,      new Sha256Hash("000008a6e7c1c9547c5b2e7bc1e30f813cc9684428e11e8bbc2f0f270943f318"));
+        checkpoints.put( 50000,  new Sha256Hash("00000010be6026f1f993dc2d51654ffeab948269cc067ea0bd3760c87ecfc7d0"));
+        checkpoints.put( 100000, new Sha256Hash("000000380d10bb4bb67ff8ef4c193f9a83a9d390389138c8a690722fb1ee2094"));
+        checkpoints.put( 150000, new Sha256Hash("000000020ee690f42fb7937038de393a734c7b0094b0185491c8483038b54a79"));
+        checkpoints.put( 200000, new Sha256Hash("0000000089e209620a4819d46a7bdbba03924d3af1ae6f7668d8cc977d4e542c"));
+        checkpoints.put( 250000, new Sha256Hash("000000010f69e2769cdacd033779acf44c7dc1e862eb5314b7179088d1c38b1e"));
+        checkpoints.put( 281000, new Sha256Hash("00000000b1fb0f01e1eca91c8f6b869ec339f64210afeb793a5d75fc6c26b87b"));
+        checkpoints.put( 350000, new Sha256Hash("000000019353d980a7110b404f57db814de288239bdfed90a77618b5b02cc125"));
+        checkpoints.put( 400000, new Sha256Hash("00000002eea94d836af8165f504d5f6d4994fa91a9eb3a76ff6113fa7466c05b"));
+        checkpoints.put( 450000, new Sha256Hash("00000002b5fec4173b250fe046fc7416321df7f89ee54bb8e74688b10358a2c5"));
+        checkpoints.put( 470000, new Sha256Hash("00000001a7e2ebc09c3e8df413180b800c0a61f26fe744e539ddd339f89a468f"));
+        checkpoints.put( 490000, new Sha256Hash("00000000dfba6baf869f8b5b43568b3008531046fef5a6caf83ca2082b264e21"));
     }
 
     //Unit Test Information
-    public static final String UNITTEST_ADDRESS = "QSCbxvRcb6ojL6WFw1oB9hbEkWjLgGv2uD";
-    public static final String UNITTEST_ADDRESS_PRIVATE_KEY = "UXe9UTQdEh5YoYpSAHeqwq7Cfi6LNBAyUyJnjShFAdPpEWu3EdcF";
+    public static final String UNITTEST_ADDRESS = "7JT3iZKJ2QcwjQ2bqS7bgqZsNR8JWtVY58";
+    public static final String UNITTEST_ADDRESS_PRIVATE_KEY = "5nzSTUE1Z1RhhVxX2LGgfqRREC5SLavJMwgQzukE3iWn8V2sK9t";
 
 
 
