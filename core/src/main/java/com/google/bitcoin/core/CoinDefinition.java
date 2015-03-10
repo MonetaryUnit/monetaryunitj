@@ -14,8 +14,8 @@ public class CoinDefinition {
     public static final String coinURIScheme = "monetaryunit";
     public static final String coinURIScheme2 = "monetaryunit";
     public static final String coinInternalName = "monetaryunit";
-    public static final String cryptsyMarketId = "0";
-    public static final String cryptsyMarketCurrency = "MUE";
+    public static final String cryptsyMarketId = "2";
+    public static final String cryptsyMarketCurrency = "BTC";
     public static final String PATTERN_PRIVATE_KEY_START = "[5]";
 
     public static String lowerCaseCoinName() { return coinName.toLowerCase(); }
@@ -27,8 +27,8 @@ public class CoinDefinition {
     public static final CoinPrecision coinPrecision = CoinPrecision.Coins;
 
 
-    public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://104.131.87.192:3000/";
-    public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://104.131.87.192:3000/";
+    public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://104.236.152.29/";
+    public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://104.236.152.29/";
     public static final String BLOCKEXPLORER_BLOCK_PATH = "block/";
     public static final String BLOCKEXPLORER_TRANSACTION_PATH = "tx/";
     public static final String BLOCKEXPLORER_ADDRESS_PATH = "address/";
@@ -46,17 +46,17 @@ public class CoinDefinition {
     public static final CoinHash coinHash = CoinHash.quark;
 
     public static boolean checkpointFileSupport = true;
-    public static int checkpointDaysBack = 5;
+    public static int checkpointDaysBack = 1;
     //Original Values
     public static final int TARGET_TIMESPAN = (int)(10 * 40);  // 10 minutes per difficulty cycle, on average.
-    public static final int TARGET_SPACING = (int)(1 * 40);  // 30 seconds per block.
+    public static final int TARGET_SPACING = (int)(40);  // 30 seconds per block.
     public static final int INTERVAL = TARGET_TIMESPAN / TARGET_SPACING;  //20 blocks
 
     public static final int getInterval(int height, boolean testNet) {
             return INTERVAL;
     }
     public static final int getIntervalCheckpoints() {
-            return INTERVAL*100;
+            return INTERVAL*900;
 
     }
     public static final int getTargetTimespan(int height, boolean testNet) {
@@ -70,9 +70,9 @@ public class CoinDefinition {
     {
             return value / 2;
     }
-    public static int spendableCoinbaseDepth = 240; //main.h: static const int COINBASE_MATURITY
+    public static int spendableCoinbaseDepth = 100; //main.h: static const int COINBASE_MATURITY
     public static BigInteger COIN = BigInteger.valueOf(100000);
-    public static final BigInteger MAX_MONEY = BigInteger.valueOf(500000000).multiply(COIN);                 //main.h:  MAX_MONEY
+    public static final BigInteger MAX_MONEY = BigInteger.valueOf(1000000000000000L).multiply(COIN);                 //main.h:  MAX_MONEY
     //public static final String MAX_MONEY_STRING = "200000000";     //main.h:  MAX_MONEY
 
 
@@ -83,11 +83,11 @@ public class CoinDefinition {
     public static final BigInteger DEFAULT_MIN_RELAY_TX_FEE = BigInteger.valueOf(100);   // MIN_TX_FEE
     public static final BigInteger DUST_LIMIT = CoinDefinition.CENT; //main.h CTransaction::GetMinFee        0.01 coins
 
-    public static final int PROTOCOL_VERSION = 70001;          //version.h PROTOCOL_VERSION
-    public static final int MIN_PROTOCOL_VERSION = 209;        //version.h MIN_PROTO_VERSION
+    public static final int PROTOCOL_VERSION = 70002;          //version.h PROTOCOL_VERSION
+    public static final int MIN_PROTOCOL_VERSION = 70000;        //version.h MIN_PROTO_VERSION
 
-    public static final int BLOCK_CURRENTVERSION = 1;   //CBlock::CURRENT_VERSION
-    public static final int MAX_BLOCK_SIZE = 1 * 1000 * 1000;
+    public static final int BLOCK_CURRENTVERSION = 112;   //CBlock::CURRENT_VERSION
+    public static final int MAX_BLOCK_SIZE = 5 * 1000 * 1000;
 
 
     public static final boolean supportsBloomFiltering = true; //Requires PROTOCOL_VERSION 70000 in the client
@@ -115,16 +115,22 @@ public class CoinDefinition {
     static public int genesisBlockValue = 0;                                                              //main.cpp: LoadBlockIndex
     //taken from the raw data of the block explorer
 
-    static public String genesisTxInBytes = "4d204f204e204520542041205220592055204e20492054";
-    static public String genesisTxOutBytes = "";
+    static public String genesisTxInBytes = "a2cc3c1d8ab6e50e80464693199eefdd172d45c4129998394e636e47b5621364";
+    static public String genesisTxOutBytes = "a2cc3c1d8ab6e50e80464693199eefdd172d45c4129998394e636e47b5621364";
 
     //net.cpp strDNSSeed
     static public String[] dnsSeeds = new String[] {
-            "muechain.info",
-            "103.19.252.82",
-            "178.62.247.76",
-            "104.131.66.88",
-
+            "dnsseed.monetaryunit.tk",
+            "server4.cryptex.biz",
+            "104.131.125.97",
+            "104.236.152.29",
+            "64.111.58.118",
+            "162.243.102.105",
+            "119.242.148.23",
+            "178.62.63.61",
+            "162.255.116.196",
+            "151.80.206.100",
+            "107.150.39.42",
     };
     public static int minBroadcastConnections = 0;   //0 for default; we need more peers.
 
@@ -134,16 +140,16 @@ public class CoinDefinition {
     public static final boolean supportsTestNet = false;
     public static final int testnetAddressHeader = 119;             //base58.h CBitcoinAddress::PUBKEY_ADDRESS_TEST
     public static final int testnetp2shHeader = 199;             //base58.h CBitcoinAddress::SCRIPT_ADDRESS_TEST
-    public static final long testnetPacketMagic = 0x011a39f7;      //0xfc, 0xc1, 0xb7, 0xdc
-    public static final String testnetGenesisHash = "5e039e1ca1dbf128973bf6cff98169e40a1b194c3b91463ab74956f413b2f9c8";
+    public static final long testnetPacketMagic = 0x04050504; //0xfc, 0xc1, 0xb7, 0xdc
+    public static final String testnetGenesisHash = "0000070e6b650e7a6f20e015031b74c1f7e2b25ed4e419d8825ab9cc7eccfa92";
     static public long testnetGenesisBlockDifficultyTarget = (0x1e0fffffL);         //main.cpp: LoadBlockIndex
-    static public long testnetGenesisBlockTime = 1373481000L;                       //main.cpp: LoadBlockIndex
-    static public long testnetGenesisBlockNonce = (905523645);                         //main.cpp: LoadBlockIndex
+    static public long testnetGenesisBlockTime = 1404668205L;                       //main.cpp: LoadBlockIndex
+    static public long testnetGenesisBlockNonce = (139785);                         //main.cpp: LoadBlockIndex
 
 
-    static final long _COIN = 10000000;
+    static final long _COIN = 1000000000;
     static final BigInteger nGenesisBlockRewardCoin = BigInteger.valueOf(0 * _COIN);
-    static final BigInteger nBlockRewardStartCoin = BigInteger.valueOf(2048 * _COIN);
+    static final BigInteger nBlockRewardStartCoin = BigInteger.valueOf(40 * _COIN);
     static final BigInteger nBlockRewardMinimumCoin = COIN;
 
     //main.cpp GetBlockValue(height, fee)
@@ -154,11 +160,11 @@ public class CoinDefinition {
             return nGenesisBlockRewardCoin;
         }
 
-        BigInteger nSubsidy = BigInteger.valueOf(2048L * 100000L);
+        BigInteger nSubsidy = BigInteger.valueOf(40L * 1000000000L);
 
         // Subsidy is cut in half every 60480 blocks (21 days)
         //nSubsidy >>= (nHeight / 60480);
-        nSubsidy = nSubsidy.shiftRight(nHeight / 60480);
+        nSubsidy = nSubsidy.shiftRight(nHeight / 60480); //TODO
 
         // Minimum subsidy
         if (nSubsidy.compareTo(nBlockRewardMinimumCoin) < 0)
@@ -203,6 +209,7 @@ public class CoinDefinition {
         checkpoints.put( 450000, new Sha256Hash("00000002b5fec4173b250fe046fc7416321df7f89ee54bb8e74688b10358a2c5"));
         checkpoints.put( 470000, new Sha256Hash("00000001a7e2ebc09c3e8df413180b800c0a61f26fe744e539ddd339f89a468f"));
         checkpoints.put( 490000, new Sha256Hash("00000000dfba6baf869f8b5b43568b3008531046fef5a6caf83ca2082b264e21"));
+        checkpoints.put( 500000, new Sha256Hash("0000000041e7a379e70a0bd8e2fcb97e9badd40199df9d4232ede49c87706a88"));
     }
 
     //Unit Test Information

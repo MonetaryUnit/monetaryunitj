@@ -134,11 +134,11 @@ public abstract class NetworkParameters implements Serializable {
             //
             //   "Digitalcoin, A Currency for a Digital Age"
             byte[] bytes = Hex.decode
-                    ("04b217bb4e022309");
+                    ("04ffff001d0104454d204f204e204520542041205220592055204e20492054");
             t.addInput(new TransactionInput(n, t, bytes));
             ByteArrayOutputStream scriptPubKeyBytes = new ByteArrayOutputStream();
             Script.writeBytes(scriptPubKeyBytes, Hex.decode
-                    ("04a5814813115273a109cff99907ba4a05d951873dae7acb6c973d0c9e7c88911a3dbc9aa600deac241b91707e7b4ffb30ad91c8e56e695a1ddf318592988afe0a"));
+                    (""));
             scriptPubKeyBytes.write(ScriptOpCodes.OP_CHECKSIG);
             t.addOutput(new TransactionOutput(n, t, Utils.toNanoCoins(0, 0), scriptPubKeyBytes.toByteArray()));
         } catch (Exception e) {
