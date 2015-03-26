@@ -27,8 +27,8 @@ public class CoinDefinition {
     public static final CoinPrecision coinPrecision = CoinPrecision.Coins;
 
 
-    public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://104.236.152.29/";
-    public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://104.236.152.29/";
+    public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://muechain.info/";
+    public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://muechain.info/";
     public static final String BLOCKEXPLORER_BLOCK_PATH = "block/";
     public static final String BLOCKEXPLORER_TRANSACTION_PATH = "tx/";
     public static final String BLOCKEXPLORER_ADDRESS_PATH = "address/";
@@ -121,6 +121,7 @@ public class CoinDefinition {
     //net.cpp strDNSSeed
     static public String[] dnsSeeds = new String[] {
             "dnsseed.monetaryunit.tk",
+            "dnsseed2.monetaryunit.tk",
             "server4.cryptex.biz",
             "104.131.125.97",
             "104.236.152.29",
@@ -210,6 +211,11 @@ public class CoinDefinition {
         checkpoints.put( 470000, new Sha256Hash("00000001a7e2ebc09c3e8df413180b800c0a61f26fe744e539ddd339f89a468f"));
         checkpoints.put( 490000, new Sha256Hash("00000000dfba6baf869f8b5b43568b3008531046fef5a6caf83ca2082b264e21"));
         checkpoints.put( 500000, new Sha256Hash("0000000041e7a379e70a0bd8e2fcb97e9badd40199df9d4232ede49c87706a88"));
+        checkpoints.put( 510000, new Sha256Hash("000000000249a0638e89196a806350de4c302687c8939486875dd26faf102838"));
+        checkpoints.put( 520000, new Sha256Hash("000000006f3915dd9fceb71a3bcd7db79f069a7a3f81f0292eb69422628bb7b5"));
+        checkpoints.put( 530000, new Sha256Hash("0000000028aa5e234f9923e3b600ed15faf597e9adea8c0a63cc407122fd5452"));
+        checkpoints.put( 540000, new Sha256Hash("0000000029695216538bc6f2ed706237a2a7fc120ab53f37a629d69735babde4"));
+
     }
 
     //Unit Test Information
