@@ -86,7 +86,7 @@ public class CoinDefinition {
     public static final int PROTOCOL_VERSION = 70002;          //version.h PROTOCOL_VERSION
     public static final int MIN_PROTOCOL_VERSION = 70000;        //version.h MIN_PROTO_VERSION
 
-    public static final int BLOCK_CURRENTVERSION = 112;   //CBlock::CURRENT_VERSION
+    public static final int BLOCK_CURRENTVERSION = 113;   //CBlock::CURRENT_VERSION
     public static final int MAX_BLOCK_SIZE = 5 * 1000 * 1000;
 
 
@@ -120,18 +120,10 @@ public class CoinDefinition {
 
     //net.cpp strDNSSeed
     static public String[] dnsSeeds = new String[] {
-            "dnsseed.monetaryunit.tk",
-            "dnsseed2.monetaryunit.tk",
-            "server4.cryptex.biz",
-            "104.131.125.97",
             "104.236.152.29",
-            "64.111.58.118",
-            "162.243.102.105",
-            "119.242.148.23",
-            "178.62.63.61",
-            "162.255.116.196",
-            "151.80.206.100",
-            "107.150.39.42",
+            "46.105.62.121",
+            "144.76.238.2",
+            "104.131.87.192"
     };
     public static int minBroadcastConnections = 0;   //0 for default; we need more peers.
 
