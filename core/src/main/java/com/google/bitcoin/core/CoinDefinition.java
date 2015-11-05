@@ -27,8 +27,8 @@ public class CoinDefinition {
     public static final CoinPrecision coinPrecision = CoinPrecision.Coins;
 
 
-    public static final String BLOCKEXPLORER_BASE_URL_PROD = "http://muechain.info/";
-    public static final String BLOCKEXPLORER_BASE_URL_TEST = "http://muechain.info/";
+    public static final String BLOCKEXPLORER_BASE_URL_PROD = "https://chain.muewallet.com/";
+    public static final String BLOCKEXPLORER_BASE_URL_TEST = "https://chain.muewallet.com/";
     public static final String BLOCKEXPLORER_BLOCK_PATH = "block/";
     public static final String BLOCKEXPLORER_TRANSACTION_PATH = "tx/";
     public static final String BLOCKEXPLORER_ADDRESS_PATH = "address/";
@@ -79,14 +79,14 @@ public class CoinDefinition {
     public static BigInteger CENT = BigInteger.valueOf(1000);
     public static BigInteger mCOIN = BigInteger.valueOf(100);
 
-    public static final BigInteger DEFAULT_MIN_TX_FEE = BigInteger.valueOf(10);   // MIN_TX_FEE
-    public static final BigInteger DEFAULT_MIN_RELAY_TX_FEE = BigInteger.valueOf(100);   // MIN_TX_FEE
+    public static final BigInteger DEFAULT_MIN_TX_FEE = BigInteger.valueOf(100);   // MIN_TX_FEE
+    public static final BigInteger DEFAULT_MIN_RELAY_TX_FEE = BigInteger.valueOf(1000);   // MIN_TX_FEE
     public static final BigInteger DUST_LIMIT = CoinDefinition.CENT; //main.h CTransaction::GetMinFee        0.01 coins
 
-    public static final int PROTOCOL_VERSION = 70002;          //version.h PROTOCOL_VERSION
-    public static final int MIN_PROTOCOL_VERSION = 70000;        //version.h MIN_PROTO_VERSION
+    public static final int PROTOCOL_VERSION = 70003;          //version.h PROTOCOL_VERSION
+    public static final int MIN_PROTOCOL_VERSION = 70003;        //version.h MIN_PROTO_VERSION
 
-    public static final int BLOCK_CURRENTVERSION = 113;   //CBlock::CURRENT_VERSION
+    public static final int BLOCK_CURRENTVERSION = 115;   //CBlock::CURRENT_VERSION
     public static final int MAX_BLOCK_SIZE = 5 * 1000 * 1000;
 
 
@@ -120,10 +120,13 @@ public class CoinDefinition {
 
     //net.cpp strDNSSeed
     static public String[] dnsSeeds = new String[] {
-            "104.236.152.29",
-            "46.105.62.121",
-            "144.76.238.2",
-            "104.131.87.192"
+            "uk.exapool.com",
+            "nl.exapool.com",
+            "104.236.101.122",
+            "104.131.230.130",
+            "54.93.35.41",
+            "178.33.209.212"
+
     };
     public static int minBroadcastConnections = 0;   //0 for default; we need more peers.
 
@@ -207,6 +210,15 @@ public class CoinDefinition {
         checkpoints.put( 520000, new Sha256Hash("000000006f3915dd9fceb71a3bcd7db79f069a7a3f81f0292eb69422628bb7b5"));
         checkpoints.put( 530000, new Sha256Hash("0000000028aa5e234f9923e3b600ed15faf597e9adea8c0a63cc407122fd5452"));
         checkpoints.put( 540000, new Sha256Hash("0000000029695216538bc6f2ed706237a2a7fc120ab53f37a629d69735babde4"));
+        checkpoints.put( 550000, new Sha256Hash("00000000209dbf5cdabdee5c0d1c19ba9d531386cebe0958d0e8ddb83a6fc513"));
+        checkpoints.put( 600000, new Sha256Hash("000000000f10d6e637f485f504745d99b9b372ac55b68cdb1a91c9d8f69bfb08"));
+        checkpoints.put( 700000, new Sha256Hash("00000000260bb06e7ca785e93a09b515d88fb4a83afd4fdb7b4e900bb6905247"));
+        checkpoints.put( 800000, new Sha256Hash("00000000b6a1fe048f218cf5e7d9f82b55b116a824ff6b13b47a83212e9396dd"));
+        checkpoints.put( 900000, new Sha256Hash("000000007b8bbd5bcda8ec2060c9962392521aec0456268318b386b8cf0c9e87"));
+        checkpoints.put( 1000000, new Sha256Hash("0000000049135b25263a792b37435587a85d3ef87034f83b6540ad79a65712c2"));
+        checkpoints.put( 1100000, new Sha256Hash("0000000002e262f10fbfb4a77267585cdd47c149df8a297f19334fa4cde5c557"));
+
+
 
     }
 
