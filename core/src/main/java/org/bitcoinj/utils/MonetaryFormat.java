@@ -36,7 +36,7 @@ import org.bitcoinj.core.Monetary;
  * <p>
  * Utility for formatting and parsing coin values to and from human readable form.
  * </p>
- * 
+ *
  * <p>
  * MonetaryFormat instances are immutable. Invoking a configuration method has no effect on the receiving instance; you
  * must store and use the new instance it returns, instead. Instances are thread safe, so they may be stored safely as
@@ -46,19 +46,19 @@ import org.bitcoinj.core.Monetary;
 public final class MonetaryFormat {
 
     /** Standard format for the BTC denomination. */
-    public static final MonetaryFormat BTC = new MonetaryFormat().shift(0).minDecimals(2).repeatOptionalDecimals(2, 3);
+    public static final MonetaryFormat BTC = new MonetaryFormat().shift(0).minDecimals(2).optionalDecimals(3);
     /** Standard format for the mBTC denomination. */
     public static final MonetaryFormat MBTC = new MonetaryFormat().shift(3).minDecimals(2).optionalDecimals(2);
     /** Standard format for the µBTC denomination. */
-    public static final MonetaryFormat UBTC = new MonetaryFormat().shift(6).minDecimals(0).optionalDecimals(2);
+    public static final MonetaryFormat UBTC = new MonetaryFormat().shift(4).minDecimals(0).optionalDecimals(2);
     /** Standard format for fiat amounts. */
     public static final MonetaryFormat FIAT = new MonetaryFormat().shift(0).minDecimals(2).repeatOptionalDecimals(2, 1);
     /** Currency code for base 1 Bitcoin. */
-    public static final String CODE_BTC = "BTC";
+    public static final String CODE_BTC = "MUE";
     /** Currency code for base 1/1000 Bitcoin. */
-    public static final String CODE_MBTC = "mBTC";
+    public static final String CODE_MBTC = "MUE";
     /** Currency code for base 1/1000000 Bitcoin. */
-    public static final String CODE_UBTC = "µBTC";
+    public static final String CODE_UBTC = "µMUE";
 
     public static final int MAX_DECIMALS = 8;
 
@@ -147,12 +147,12 @@ public final class MonetaryFormat {
      * Each value is a number of decimals in that group. If the value precision exceeds all decimals specified
      * (including minimum decimals), the value will be rounded. This configuration is not relevant for parsing.
      * </p>
-     * 
+     *
      * <p>
      * For example, if you pass <tt>4,2</tt> it will add four decimals to your formatted string if needed, and then add
      * another two decimals if needed. At this point, rather than adding further decimals the value will be rounded.
      * </p>
-     * 
+     *
      * @param groups
      *            any number numbers of decimals, one for each group
      */
@@ -170,12 +170,12 @@ public final class MonetaryFormat {
      * precision. If the value precision exceeds all decimals specified (including minimum decimals), the value will be
      * rounded. This configuration is not relevant for parsing.
      * </p>
-     * 
+     *
      * <p>
      * For example, if you pass <tt>1,8</tt> it will up to eight decimals to your formatted string if needed. After
      * these have been used up, rather than adding further decimals the value will be rounded.
      * </p>
-     * 
+     *
      * @param decimals
      *            value of the group to be repeated
      * @param repetitions
@@ -226,7 +226,7 @@ public final class MonetaryFormat {
 
     /**
      * Configure currency code for given decimal separator shift. This configuration is not relevant for parsing.
-     * 
+     *
      * @param codeShift
      *            decimal separator shift, see {@link #shift}
      * @param code
@@ -303,7 +303,7 @@ public final class MonetaryFormat {
         this.codes = new String[MAX_DECIMALS];
         this.codes[0] = CODE_BTC;
         this.codes[3] = CODE_MBTC;
-        this.codes[6] = CODE_UBTC;
+        this.codes[4] = CODE_UBTC;
         this.codeSeparator = ' ';
         this.codePrefixed = true;
     }
@@ -394,7 +394,7 @@ public final class MonetaryFormat {
 
     /**
      * Parse a human readable coin value to a {@link org.bitcoinj.core.Coin} instance.
-     * 
+     *
      * @throws NumberFormatException
      *             if the string cannot be parsed for some reason
      */
@@ -404,7 +404,7 @@ public final class MonetaryFormat {
 
     /**
      * Parse a human readable fiat value to a {@link org.bitcoinj.utils.Fiat} instance.
-     * 
+     *
      * @throws NumberFormatException
      *             if the string cannot be parsed for some reason
      */

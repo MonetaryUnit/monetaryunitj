@@ -25,7 +25,7 @@
         <version>0.13.6</version>
     </parent>
 
-    <artifactId>bitcoinj-core</artifactId>
+    <artifactId>monetaryunitj-core</artifactId>
 
     <name>bitcoinj</name>
     <description>A Java Bitcoin library</description>
@@ -363,7 +363,7 @@
                                 <artifactItem>
                                     <outputDirectory>target/test-classes/</outputDirectory>
                                     <groupId>org.bitcoinj</groupId>
-                                    <artifactId>bitcoinj-core</artifactId>
+                                    <artifactId>monetaryunitj-core</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
                             </artifactItems>

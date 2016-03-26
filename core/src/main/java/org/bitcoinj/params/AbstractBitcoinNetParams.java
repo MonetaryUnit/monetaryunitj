@@ -38,7 +38,7 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
     /**
      * Scheme part for Bitcoin URIs.
      */
-    public static final String BITCOIN_SCHEME = "bitcoin";
+    public static final String BITCOIN_SCHEME = "monetaryunit";
 
     private static final Logger log = LoggerFactory.getLogger(AbstractBitcoinNetParams.class);
 
@@ -55,8 +55,127 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
         return ((storedPrev.getHeight() + 1) % this.getInterval()) == 0;
     }
 
+    static double ConvertBitsToDouble(long nBits){
+        long nShift = (nBits >> 24) & 0xff;
+
+        double dDiff =
+                (double)0x0000ffff / (double)(nBits & 0x00ffffff);
+
+        while (nShift < 29)
+        {
+            dDiff *= 256.0;
+            nShift++;
+        }
+        while (nShift > 29)
+        {
+            dDiff /= 256.0;
+            nShift--;
+        }
+
+        return dDiff;
+    }
+
+    private void verifyDifficulty(BigInteger calcDiff, StoredBlock storedPrev, Block nextBlock)
+    {
+        Block prev = storedPrev.getHeader();
+
+        if (calcDiff.compareTo(this.getMaxTarget()) > 0) {
+            log.info("Difficulty hit proof of work limit: {}", calcDiff.toString(16));
+            calcDiff = this.getMaxTarget();
+        }
+
+        int accuracyBytes = (int) (nextBlock.getDifficultyTarget() >>> 24) - 3;
+        long receivedTargetCompact = nextBlock.getDifficultyTarget();
+
+        // The calculated difficulty is to a higher precision than received, so reduce here.
+        BigInteger mask = BigInteger.valueOf(0xFFFFFFL).shiftLeft(accuracyBytes * 8);
+        calcDiff = calcDiff.and(mask);
+        long newTargetCompact = Utils.encodeCompactBits(calcDiff);
+
+        if (newTargetCompact != receivedTargetCompact)
+            throw new VerificationException("Network provided difficulty bits do not match what was calculated: " +
+                    Long.toHexString(newTargetCompact) + " vs " + Long.toHexString(receivedTargetCompact));
+
+    }
+
     @Override
     public void checkDifficultyTransitions(final StoredBlock storedPrev, final Block nextBlock,
+    	final BlockStore blockStore) throws VerificationException, BlockStoreException {
+        int DiffMode = 1;
+        if (storedPrev.getHeight()+1 >= 1130000) { DiffMode = 2; }
+        if (DiffMode == 1) { checkDifficultyTransitionsOLD(storedPrev, nextBlock, blockStore); return; }
+        DarkGravityWave3(storedPrev, nextBlock, blockStore);
+        return;
+    }
+
+    private void DarkGravityWave3(final StoredBlock storedPrev, final Block nextBlock, final BlockStore blockStore) {
+        /* current difficulty formula, darkcoin - DarkGravity v3, written by Evan Duffield - evan@darkcoin.io */
+        StoredBlock BlockLastSolved = storedPrev;
+        StoredBlock BlockReading = storedPrev;
+        Block BlockCreating = nextBlock;
+        BlockCreating = BlockCreating;
+        long nActualTimespan = 0;
+        long LastBlockTime = 0;
+        long PastBlocksMin = 24;
+        long PastBlocksMax = 24;
+        long CountBlocks = 0;
+        BigInteger PastDifficultyAverage = BigInteger.ZERO;
+        BigInteger PastDifficultyAveragePrev = BigInteger.ZERO;
+        Block prev = storedPrev.getHeader();
+        BigInteger newTarget = Utils.decodeCompactBits(prev.getDifficultyTarget());
+        if (BlockLastSolved == null || BlockLastSolved.getHeight() == 0 || BlockLastSolved.getHeight() < PastBlocksMin) {
+            verifyDifficulty(newTarget, storedPrev, nextBlock);
+            return;
+        }
+
+        for (int i = 1; BlockReading != null && BlockReading.getHeight() > 0; i++) {
+            if (PastBlocksMax > 0 && i > PastBlocksMax) { break; }
+            CountBlocks++;
+
+            if(CountBlocks <= PastBlocksMin) {
+                if (CountBlocks == 1) { PastDifficultyAverage = BlockReading.getHeader().getDifficultyTargetAsInteger(); }
+                else { PastDifficultyAverage = ((PastDifficultyAveragePrev.multiply(BigInteger.valueOf(CountBlocks)).add(BlockReading.getHeader().getDifficultyTargetAsInteger()).divide(BigInteger.valueOf(CountBlocks + 1)))); }
+                PastDifficultyAveragePrev = PastDifficultyAverage;
+            }
+
+            if(LastBlockTime > 0){
+                long Diff = (LastBlockTime - BlockReading.getHeader().getTimeSeconds());
+                nActualTimespan += Diff;
+            }
+            LastBlockTime = BlockReading.getHeader().getTimeSeconds();
+
+            try {
+                StoredBlock BlockReadingPrev = blockStore.get(BlockReading.getHeader().getPrevBlockHash());
+                if (BlockReadingPrev == null)
+                {
+                    //assert(BlockReading); break;
+                    return;
+                }
+                BlockReading = BlockReadingPrev;
+            }
+            catch(BlockStoreException x)
+            {
+                return;
+            }
+        }
+
+        BigInteger bnNew= PastDifficultyAverage;
+
+        long nTargetTimespan = CountBlocks*NetworkParameters.TARGET_SPACING;//nTargetSpacing;
+
+        if (nActualTimespan < nTargetTimespan/3)
+            nActualTimespan = nTargetTimespan/3;
+        if (nActualTimespan > nTargetTimespan*3)
+            nActualTimespan = nTargetTimespan*3;
+
+        // Retarget
+        bnNew = bnNew.multiply(BigInteger.valueOf(nActualTimespan));
+        bnNew = bnNew.divide(BigInteger.valueOf(nTargetTimespan));
+        verifyDifficulty(bnNew, storedPrev, nextBlock);
+
+    }
+
+    public void checkDifficultyTransitionsOLD(final StoredBlock storedPrev, final Block nextBlock,
     	final BlockStore blockStore) throws VerificationException, BlockStoreException {
         Block prev = storedPrev.getHeader();
 
@@ -91,10 +210,10 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
         int timespan = (int) (prev.getTimeSeconds() - blockIntervalAgo.getTimeSeconds());
         // Limit the adjustment step.
         final int targetTimespan = this.getTargetTimespan();
-        if (timespan < targetTimespan / 4)
-            timespan = targetTimespan / 4;
-        if (timespan > targetTimespan * 4)
-            timespan = targetTimespan * 4;
+        if (timespan < targetTimespan * 100 / 110)
+            timespan = targetTimespan * 100 / 110;
+        if (timespan > targetTimespan * 2)
+            timespan = targetTimespan * 2;
 
         BigInteger newTarget = Utils.decodeCompactBits(prev.getDifficultyTarget());
         newTarget = newTarget.multiply(BigInteger.valueOf(timespan));

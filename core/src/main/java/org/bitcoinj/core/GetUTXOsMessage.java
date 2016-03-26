@@ -38,7 +38,7 @@ import java.util.List;
  * be quite slow and disk intensive to do that!</p>
  */
 public class GetUTXOsMessage extends Message {
-    public static final int MIN_PROTOCOL_VERSION = 70002;
+    public static final int MIN_PROTOCOL_VERSION = 70016;
     /** Bitmask of service flags required for a node to support this command (0x3) */
     public static final int SERVICE_FLAGS_REQUIRED = 3;
 

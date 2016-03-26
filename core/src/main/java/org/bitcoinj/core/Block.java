@@ -38,7 +38,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import com.hashengineering.crypto.Hash9;
+
 import static org.bitcoinj.core.Coin.FIFTY_COINS;
+import static org.bitcoinj.core.Coin.COIN;
 import static org.bitcoinj.core.Sha256Hash.hashTwice;
 
 /**
@@ -65,7 +68,7 @@ public class Block extends Message {
      * upgrade everyone to change this, so Bitcoin can continue to grow. For now it exists as an anti-DoS measure to
      * avoid somebody creating a titanically huge but valid block and forcing everyone to download/store it forever.
      */
-    public static final int MAX_BLOCK_SIZE = 1 * 1000 * 1000;
+    public static final int MAX_BLOCK_SIZE = 5 * 1000 * 1000;
     /**
      * A "sigop" is a signature verification operation. Because they're expensive we also impose a separate limit on
      * the number in a block to prevent somebody mining a huge block that has way more sigops than normal, so is very
@@ -77,11 +80,11 @@ public class Block extends Message {
     public static final long EASIEST_DIFFICULTY_TARGET = 0x207fFFFFL;
 
     /** Block version introduced in BIP 34: Height in coinbase */
-    public static final long BLOCK_VERSION_BIP34 = 2;
+    public static final long BLOCK_VERSION_BIP34 = 112;
     /** Block version introduced in BIP 66: Strict DER signatures */
-    public static final long BLOCK_VERSION_BIP66 = 3;
+    public static final long BLOCK_VERSION_BIP66 = 114;
     /** Block version introduced in BIP 65: OP_CHECKLOCKTIMEVERIFY */
-    public static final long BLOCK_VERSION_BIP65 = 4;
+    public static final long BLOCK_VERSION_BIP65 = 116;
 
     // Fields defined as part of the protocol format.
     private long version;
@@ -103,7 +106,7 @@ public class Block extends Message {
 
     private transient boolean headerBytesValid;
     private transient boolean transactionBytesValid;
-    
+
     // Blocks can be encoded in a way that will use more bytes than is optimal (due to VarInts having multiple encodings)
     // MAX_BLOCK_SIZE must be compared to the optimal encoding, not the actual encoding, so when parsing, we keep track
     // of the size of the ideal encoding in addition to the actual message size (which Message needs)
@@ -113,8 +116,8 @@ public class Block extends Message {
     Block(NetworkParameters params) {
         super(params);
         // Set up a few basic things. We are not complete after this though.
-        version = 1;
-        difficultyTarget = 0x1d07fff8L;
+        version = 112;
+        difficultyTarget = 0x1e0fffffL;
         time = System.currentTimeMillis() / 1000;
         prevBlockHash = Sha256Hash.ZERO_HASH;
 
@@ -130,8 +133,8 @@ public class Block extends Message {
      * Contruct a block object from the Bitcoin wire format.
      * @param params NetworkParameters object.
      * @param parseLazy Whether to perform a full parse immediately or delay until a read is requested.
-     * @param parseRetain Whether to retain the backing byte array for quick reserialization.  
-     * If true and the backing byte array is invalidated due to modification of a field then 
+     * @param parseRetain Whether to retain the backing byte array for quick reserialization.
+     * If true and the backing byte array is invalidated due to modification of a field then
      * the cached bytes may be repopulated and retained if the message is serialized again in the future.
      * @param length The length of message if known.  Usually this is provided when deserializing of the wire
      * as the length will be provided as part of the header.  If unknown then set to Message.UNKNOWN_LENGTH
@@ -178,7 +181,18 @@ public class Block extends Message {
      * </p>
      */
     public Coin getBlockInflation(int height) {
-        return FIFTY_COINS.shiftRight(height / params.getSubsidyDecreaseBlockCount());
+        if(height == 0 ) {FIFTY_COINS = COIN.multiply(0);}
+        else if(height == 1 ) {FIFTY_COINS = COIN.multiply(40000000);}
+        else if(height <= 40000 ) {FIFTY_COINS = COIN.valueOf(2500000);}
+        else if(height <= 80000 ) {FIFTY_COINS = COIN.multiply(1);}
+        else if(height <= 120000 ) {FIFTY_COINS = COIN.multiply(2);}
+        else if(height <= 160000 ) {FIFTY_COINS = COIN.multiply(4);}
+        else if(height <= 200000 ) {FIFTY_COINS = COIN.multiply(8);}
+        else if(height <= 240000 ) {FIFTY_COINS = COIN.multiply(10);}
+        else if(height <= 280000 ) {FIFTY_COINS = COIN.multiply(20);}
+        else if(height <= 320000 ) {FIFTY_COINS = COIN.multiply(30);}
+        else if(height >= 320001 ) {FIFTY_COINS = COIN.multiply(40);}
+        return FIFTY_COINS;
     }
 
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
@@ -200,7 +214,7 @@ public class Block extends Message {
         difficultyTarget = readUint32();
         nonce = readUint32();
 
-        hash = Sha256Hash.wrapReversed(Sha256Hash.hashTwice(payload, offset, cursor - offset));
+        hash = Sha256Hash.wrapReversed(Hash9.digest(payload, offset, cursor - offset));
 
         headerParsed = true;
         headerBytesValid = parseRetain;
@@ -242,7 +256,7 @@ public class Block extends Message {
         parseTransactions();
         length = cursor - offset;
     }
-    
+
     public int getOptimalEncodingMessageSize() {
         if (optimalEncodingMessageSize != 0)
             return optimalEncodingMessageSize;
@@ -520,7 +534,7 @@ public class Block extends Message {
         try {
             ByteArrayOutputStream bos = new UnsafeByteArrayOutputStream(HEADER_SIZE);
             writeHeader(bos);
-            return Sha256Hash.wrapReversed(Sha256Hash.hashTwice(bos.toByteArray()));
+            return Sha256Hash.wrapReversed(Hash9.digest(bos.toByteArray()));
         } catch (IOException e) {
             throw new RuntimeException(e); // Cannot happen.
         }
@@ -847,7 +861,7 @@ public class Block extends Message {
     }
 
     /** Exists only for unit testing. */
-    void setMerkleRoot(Sha256Hash value) {
+    public void setMerkleRoot(Sha256Hash value) {
         unCacheHeader();
         merkleRoot = value;
         hash = null;
